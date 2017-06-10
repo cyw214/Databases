@@ -1,9 +1,9 @@
-The Enterprise:
-————————————
+This project models a business enterprise.
+
+<b>The Enterprise: </b>
 This Project Models REI. REI is a retail store that specializes in outdoor products. The interfaces take advantage processes in the buffer read class to clear the screen on upon any meaningful change from one menu to another. to enable a more dynamic experience, a back option is offered in many menus to go back to a previous menu. 
 
-Customer interface:
-———————————— 
+<b>Customer interface:</b>
 The customer relation may be accessed from the first menu of the main interface offering a choice between interfaces. Following selection of the customer interface the user is prompted with two choices: a) store and b) online.
 
 a) store: this selection represents a decision to shop at a physical location rather than online. upon selection of choice a), a customer is prompted with a shopping menu.
@@ -28,14 +28,12 @@ b) online
     upon selection of online a customer is either asked to sign up or log in. if login is chose, the user enters their user name and password, is verified or rejected and continues to shop in store 111 which is designated as the online store. the only major difference between the online shopping experience and the physical store is that online credit card transactions are conducted automatically and the user has the option to view their profile. any user of the interface, if not a customer, may choose sign up, create an account and proceed to the store to shop if they so wish.
   
 
-Store manager interface:
-————————————
+<b>Store manager interface:</b>
 From the first menu offering a selection of interfaces a user may choose the store manager interface. Upon choosing this option,  a manager is asked to enter a store. After choosing the store, The store manager interface is populated with two options, customer and inventory. in customer the manager may view the total balance of any transaction that took place between a specified date along with all the transactions. The store manager may also choose to view customer profiles of customers whose data has been collected under customer profiles within this same menu.
 
 the second set of choices allows for reorders from vendors, as well as an option to add products not in inventory from a list of available products not contained in inventory, but available through vendors.
 
-PLSQL:
-————————————
+<b>PLSQL:</b>
 there are two triggers that take care of  much needed constraints on the data base. 
 
 store_inv_after_cut_trans: subtracts the quantity of a product held from any given store inventory after any cut_trans, and automatically reorders if the balance drops to 0.
