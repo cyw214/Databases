@@ -1,5 +1,3 @@
-This project models a business enterprise.
-
 <b>The Enterprise: </b>
 This Project Models REI. REI is a retail store that specializes in outdoor products. The interfaces take advantage processes in the buffer read class to clear the screen on upon any meaningful change from one menu to another. to enable a more dynamic experience, a back option is offered in many menus to go back to a previous menu. 
 
