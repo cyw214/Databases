@@ -1,0 +1,50 @@
+Query to combine subtypes:
+—————————————————————————-
+select * from camp natural join product
+union
+  select * from climb natural join product
+union
+  select * from cycle natural join product
+union
+select  * from hike natural join product
+union 
+  select * from kayak natural join product;
+
+select * from camp natural join product union select * from climb natural join product union select * from cycle natural join product union select  * from hike natural join product union select * from kayak natural join product
+
+Insert Into Out Door Clothing Vendor
+—————————————————-—————————————————-
+select upc, product_name, sale_price from store_inv natural join 
+(select * from (select * from camp natural join product
+union
+  select * from climb natural join product
+union
+  select * from cycle natural join product
+union
+select  * from hike natural join product
+union 
+  select * from kayak natural join product) Where p_type = 'Clothing' )
+group by upc, product_name, sale_price;
+
+inserts for discrepancies between vendors and product
+—————————————————-—————————————————-—————————————————
+insert into vendor_inv (vendor_id, upc, sale_price, quantity) 
+select '678', upc, sale_price, 10000 
+
+
+select *
+from product natural join 
+(select upc from product
+minus
+select upc from vendor_inv) natural join 
+(select upc from camp natural join product
+union
+select  upc from hike natural join product);
+
+Not sold in any store:
+———————————————————————————————
+UPC          PRODUCT_NAME                                 WEIGHT
+------------ ---------------------------------------- ----------
+778969689899 Gravity Classic 10.2mm x 60m                   9.25 
+999999889985 Atmos 65 AG EX                                 4.38 
+

@@ -1,0 +1,86 @@
+Triggers:
+create or replace TRIGGER store_inv_after_cust_trans 
+after INSERT ON cust_trans 
+
+referencing new as newtran
+for each row
+declare
+
+quant NUMBER(10,0);
+
+BEGIN
+  select quantity into quant from store_inv where store_id =  :newtran.store_id and upc = :newtran.upc;
+  
+  if (quant - :newtran.quantity) >= 0  and find_store_product(:newtran.store_id, :newtran.upc) = 1 then
+  quant := quant - :newtran.quantity;
+  update store_inv set quantity = quant
+  where store_id = :newtran.store_id and upc = :newtran.upc;
+  end if;
+  
+  if (quant - :newtran.quantity) < 0 and find_store_product(:newtran.store_id, :newtran.upc) = 1 then
+  order_product_from_vendor (:newtran.store_id, :newtran.upc, :newtran.date_trans, :newtran.quantity + 50);
+  end if;
+
+END;
+
+create or replace trigger store_inv_after_vend_tran 
+after insert on vend_tran
+
+referencing new as newtran
+for each row
+declare
+
+
+quant NUMBER(10,0);
+
+begin
+
+if find_store_product(:newtran.store_id, :newtran.upc)  = 1 then
+select quantity into quant from store_inv where store_id =  :newtran.store_id and upc = :newtran.upc;
+quant := quant + :newtran.quantity;
+update store_inv set quantity = quant
+where store_id = :newtran.store_id and upc = :newtran.upc;
+else 
+insert into store_inv values(:newtran.store_id, :newtran.upc, :newtran.amt_paid, :newtran.quantity);
+end if;
+end store_inv_after_vend_tran;
+
+functions:
+___________________________________________
+create or replace function find_store_product(sid in varchar2, pid in varchar2) 
+return number 
+is
+
+cursor found_product is
+select upc from store_inv where store_id = sid and upc = pid;
+
+upctemp varchar2(12);
+
+begin
+
+open found_product;
+fetch found_product into upctemp;
+
+if found_product%found then
+  return 1;
+end if;
+close found_product;
+return 0;
+
+END find_store_product;
+
+procedure:
+____________________________________________
+create or replace PROCEDURE order_product_from_vendor 
+(sid in varchar2, pid in varchar2, daytran date, quant number)
+AS 
+
+vendid varchar2(3);
+amtpaid NUMBER(12,2);
+
+BEGIN
+select vendor_id into vendid from vendor_inv where upc = pid;
+select sale_price into amtpaid from vendor_inv where upc = pid;
+
+insert into vend_tran values(vendid, sid, pid, daytran, amtpaid, quant);
+END order_product_from_vendor;
