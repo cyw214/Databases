@@ -1,4 +1,6 @@
-Triggers:
+/* 
+  Triggers:
+*/
 create or replace TRIGGER store_inv_after_cust_trans 
 after INSERT ON cust_trans 
 
@@ -45,8 +47,10 @@ insert into store_inv values(:newtran.store_id, :newtran.upc, :newtran.amt_paid,
 end if;
 end store_inv_after_vend_tran;
 
-functions:
-___________________________________________
+/*
+  Functions:
+*/
+
 create or replace function find_store_product(sid in varchar2, pid in varchar2) 
 return number 
 is
@@ -69,8 +73,10 @@ return 0;
 
 END find_store_product;
 
-procedure:
-____________________________________________
+/*
+  Procedure:
+*/
+
 create or replace PROCEDURE order_product_from_vendor 
 (sid in varchar2, pid in varchar2, daytran date, quant number)
 AS 
